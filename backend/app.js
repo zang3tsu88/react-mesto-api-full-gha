@@ -1,7 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
-const cookieParser = require('cookie-parser');
+const cors = require('cors');
+// const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const { errors } = require('celebrate');
 const router = require('./routes/routes');
@@ -11,8 +13,10 @@ const {
   errorLogger,
 } = require('./middlewares/logger');
 
+const { PORT } = process.env;
+
 const app = express();
-const PORT = process.env.PORT || 3000;
+app.use(cors());
 
 mongoose
   .connect('mongodb://127.0.0.1:27017/mestodb')
@@ -28,7 +32,7 @@ const limiter = rateLimit({
 
 app.use(limiter);
 app.use(express.json());
-app.use(cookieParser());
+// app.use(cookieParser());
 app.use(helmet());
 
 app.use(requestLogger);

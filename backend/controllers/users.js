@@ -6,7 +6,8 @@ const User = require('../models/User');
 const NotFoundError = require('../errors/NotFoundError');
 const BadRequestError = require('../errors/BadRequestError');
 const Conflict = require('../errors/Conflict');
-const { SECRET_KEY } = require('../utils/constants');
+
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 const getUsers = (req, res, next) => {
   User.find({})
@@ -95,7 +96,7 @@ const createUser = (req, res, next) => {
 const login = (req, res, next) => {
   User.findUserByCredentials(req.body.email, req.body.password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, SECRET_KEY, { expiresIn: '7d' });
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
       // позже переделать отправку через куки
       // res.cookie('jwt', token, { httpOnly: true });
       res.send({ token });
