@@ -96,8 +96,9 @@ const login = (req, res, next) => {
   User.findUserByCredentials(req.body.email, req.body.password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, SECRET_KEY, { expiresIn: '7d' });
-
-      res.cookie('jwt', token, { httpOnly: true }).send({ token });
+      // позже переделать отправку через куки
+      // res.cookie('jwt', token, { httpOnly: true });
+      res.send({ token });
     })
     .catch((err) => {
       next(err);
