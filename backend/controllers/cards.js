@@ -54,6 +54,7 @@ const likeCard = (req, res, next) => {
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
     { new: true },
   )
+    .populate('likes', 'owner')
     .orFail(new NotFoundError('No card with such id.'))
     .then((card) => res.send(card))
     .catch((err) => {
@@ -70,6 +71,7 @@ const unlikeCard = (req, res, next) => {
     { $pull: { likes: req.user._id } }, // добавить _id в массив, если его там нет
     { new: true },
   )
+    .populate('likes', 'owner')
     .orFail(new NotFoundError('No card with such id.'))
     .then((card) => res.send(card))
     .catch((err) => {
