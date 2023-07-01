@@ -9,7 +9,7 @@
 
 ## Ссылки на проект
 
-IP-адрес 158.160.104.241
+IP 158.160.104.241
 
 Frontend https://promesto.nomoreparties.sbs
 
