@@ -1,12 +1,11 @@
 class Api {
-  constructor(baseUrl, token) {
+  constructor(baseUrl) {
     this._baseUrl = baseUrl;
-    this._token = token;
   }
 
   _getHeaders() {
     return {
-      authorization: this._token,
+      authorization: `Bearer ${localStorage.getItem('jwt')}`,
       "content-type": "application/json",
     };
   }
@@ -75,9 +74,14 @@ class Api {
   }
 }
 
+// const api = new Api(
+//   "https://mesto.nomoreparties.co/v1/cohort-61",
+//   "1fcc4ee9-cb11-44f3-98b8-3e9fb7d3535d"
+// );
+
 const api = new Api(
-  "https://mesto.nomoreparties.co/v1/cohort-61",
-  "1fcc4ee9-cb11-44f3-98b8-3e9fb7d3535d"
+  // "http://localhost:3000",
+  "https://api.promesto.nomoreparties.sbs"
 );
 
 export default api;

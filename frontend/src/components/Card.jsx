@@ -5,7 +5,7 @@ import classNames from "classnames";
 function Card({ card, onCardClick, onCardLike, onCardDeleteConfirm }) {
   const currentUser = useContext(CurrentUserContext);
 
-  const isOwn = currentUser._id === card.owner._id;
+  const isOwn = currentUser._id === card.owner;
   const isLiked = card.likes.some((like) => like._id === currentUser._id);
 
   return (

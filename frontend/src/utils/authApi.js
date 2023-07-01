@@ -1,4 +1,6 @@
-export const BASE_URL = "https://auth.nomoreparties.co";
+// export const BASE_URL = "https://auth.nomoreparties.co";
+// export const BASE_URL = "http://localhost:3000";
+export const BASE_URL = "https://api.promesto.nomoreparties.sbs";
 
 function getJson(res) {
   if (res.ok) {

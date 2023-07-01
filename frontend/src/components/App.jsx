@@ -43,17 +43,33 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    api
-      .getCards()
-      .then((res) => setCards(res))
-      .catch((err) => console.log(err));
-  }, []);
+    const jwt = localStorage.getItem("jwt");
+    if (jwt){
+      Promise.all([api.getCards(),api.getCurrentUser()])
+        .then(([cardData, userData]) => {
+          setCards(cardData.reverse());
+          setCurrentUser(userData);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [isLoggedIn]);
 
   useEffect(() => {
-    api
-      .getCurrentUser()
-      .then((res) => setCurrentUser(res))
-      .catch((err) => console.log(err));
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
+      auth
+        .getUserData(jwt)
+        .then((res) => {
+          if (res) {
+            setIsLoggedIn(true);
+            setUserData({ ...userData, email: res.email });
+            navigate("/", { replace: true });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
 
   useEffect(() => {
@@ -94,24 +110,6 @@ function App() {
   ]);
   // да, массив я забыл. Только не совсем понял, вы это имели ввиду? "перечислить все состояния модальных окон"
   // как-то много всего, неужели это необходимо? Может просто [] пустой массив оставить?
-
-  useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
-    if (jwt) {
-      auth
-        .getUserData(jwt)
-        .then((res) => {
-          if (res) {
-            setIsLoggedIn(true);
-            setUserData({ ...userData, email: res.data.email });
-            navigate("/", { replace: true });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, []);
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -218,7 +216,6 @@ function App() {
     auth
       .register(email, password)
       .then((res) => {
-        console.log(res); // CONSOLE LOG ============
         setStatus(true);
         setIsInfoTooltipOpen(true);
         navigate("/sign-in");
@@ -234,7 +231,6 @@ function App() {
     auth
       .login(email, password)
       .then((res) => {
-        console.log(res); // CONSOLE LOG ============
         localStorage.setItem("jwt", res.token);
         setUserData({ email });
         setIsLoggedIn(true);
