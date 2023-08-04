@@ -70,7 +70,7 @@ function App() {
           console.log(err);
         });
     }
-  }, []);
+  }, [navigate, isLoggedIn]);
 
   useEffect(() => {
     function closeOnEsc(e) {
